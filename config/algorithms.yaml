@@ -1,7 +1,43 @@
 algorithms:
   - name: MD5
     mode: 0
+  - name: SHA1
+    mode: 100
+  - name: SHA256
+    mode: 1400
   - name: bcrypt
     mode: 3200
   - name: scrypt
     mode: 8900
+  - name: NTLM
+    mode: 1000
+  - name: MySQL323
+    mode: 200
+  - name: Wordpress (MD5 + salt)
+    mode: 400
+  - name: WPA/WPA2/WPA3
+    mode: 22000
+  - name: Office 2007
+    mode: 9500
+  - name: Office 2010
+    mode: 9800
+  - name: Office 2013
+    mode: 9600
+  - name: PDF 1.4 - 1.6
+    mode: 10400
+  - name: ZIP (WinZip)
+    mode: 13600
+  - name: 7-Zip
+    mode: 11600
+  - name: RAR5
+    mode: 13000
+  - name: TrueCrypt
+    mode: 6211
+  - name: LUKS2
+    mode: 25600
+  - name: GPG
+    mode: 22600
+  - name: OpenSSH private key
+    mode: 22200
+  - name: Argon2
+    mode: 70000

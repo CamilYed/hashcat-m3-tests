@@ -1,0 +1,7 @@
+name,mode,speed_raw,speed_hps,duration
+MD5,0,8811.8 MH/s (6.97ms) @ Accel,8811800000.0,8.25
+MD5,0,8802.5 MH/s (6.97ms) @ Accel,8802500000.0,8.18
+MD5,0,8812.4 MH/s (6.96ms) @ Accel,8812400000.0,8.26
+ZIP (WinZip),13600,1549.5 kH/s (33.18ms) @ Accel,1549500.0,24.3
+ZIP (WinZip),13600,1550.1 kH/s (33.18ms) @ Accel,1550100.0,20.77
+ZIP (WinZip),13600,1550.0 kH/s (33.17ms) @ Accel,1550000.0,20.72
