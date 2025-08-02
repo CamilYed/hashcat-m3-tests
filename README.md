@@ -1,5 +1,7 @@
 # Hashcat 7.0 on Apple M3 – Benchmark & Feature Tests
 
+> 📖 [Related article: In-depth results and analysis of Hashcat 7.0 on Apple M3](https://camilyed.github.io/2025/08/02/hashcat-m3-benchmarks.html)
+
 This project provides a scientific and automated approach to benchmarking the newly
 released [Hashcat v7.0.0](https://github.com/hashcat/hashcat) on Apple Silicon (M3). It focuses on real-world
 performance, feature testing (such as auto hash detection and Python Bridge), and visualization of results.
@@ -182,3 +184,4 @@ Example chart:
 ---
 
 > Work in progress – contributions and feedback welcome!
+> 
