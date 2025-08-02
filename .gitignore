@@ -1,0 +1,30 @@
+/.idea/
+# 🐍 Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.env
+.venv/
+env/
+venv/
+
+# 📦 Virtualenv
+pip-log.txt
+
+# 🧪 Test artifacts
+.coverage
+htmlcov/
+.cache/
+pytest_cache/
+
+# 📊 Dane wyjściowe
+data/*.csv
+plots/*.png
+
+# 🧱 System / IDE
+.DS_Store
+.idea/
+.vscode/
+*.swp

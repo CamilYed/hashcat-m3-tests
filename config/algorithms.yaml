@@ -1,0 +1,7 @@
+algorithms:
+  - name: MD5
+    mode: 0
+  - name: bcrypt
+    mode: 3200
+  - name: scrypt
+    mode: 8900
