@@ -6,6 +6,11 @@ This project provides a scientific and automated approach to benchmarking the ne
 released [Hashcat v7.0.0](https://github.com/hashcat/hashcat) on Apple Silicon (M3). It focuses on real-world
 performance, feature testing (such as auto hash detection and Python Bridge), and visualization of results.
 
+---
+
+❗ **Important:** You must use **Hashcat v7.0+** (not the Homebrew version, which installs 6.x).  
+Please follow the build-from-source instructions below.
+
 ## 🔧 Installing Hashcat v7.0.0 on macOS (Apple Silicon)
 
 ### ⚠️ Enabling GPU Support on Apple Silicon (M1/M2/M3)
@@ -15,7 +20,7 @@ If you run `hashcat -I` too early, you may see this error:
 
 ```bash
 /usr/local/share/hashcat/OpenCL/: No such file or directory
-````
+```
 
 This is because Hashcat expects the OpenCL runtime (`libOpenCL.dylib`) to be available in a specific directory that
 isn't created or linked by default.
@@ -59,13 +64,58 @@ sudo ln -s /opt/homebrew/Cellar/opencl-icd-loader/*/lib/libOpenCL.dylib /usr/loc
 hashcat -I
 
 # Expected output should include Apple Metal and OpenCL info like:
-# Name...........: Apple M3 Pro
-# OpenCL Version.: OpenCL 1.2
-# Memory.Total...: 27648 MB
+# 
+# Metal Info:
+# ===========
+# 
+# Metal.Version.: 368.12
+# 
+# Backend Device ID #01 (Alias: #02)
+#   Type...........: GPU
+#   Vendor.ID......: 2
+#   Vendor.........: Apple
+#   Name...........: Apple M3 Pro
+#   Processor(s)...: 18
+#   Preferred.Thrd.: 32
+#   Clock..........: N/A
+#   Memory.Total...: 27648 MB (limited to 10368 MB allocatable in one block)
+#   Memory.Free....: 13824 MB
+#   Memory.Unified.: 1
+#   Local.Memory...: 32 KB
+#   Phys.Location..: built-in
+#   Registry.ID....: 1091
+#   Max.TX.Rate....: N/A
+#   GPU.Properties.: headless 0, low-power 0, removable 0
+# 
+# OpenCL Info:
+# ============
+# 
+# OpenCL Platform ID #1
+#   Vendor..: Apple
+#   Name....: Apple
+#   Version.: OpenCL 1.2 (Apr 18 2025 21:46:03)
+# 
+#   Backend Device ID #02 (Alias: #01)
+#     Type...........: GPU
+#     Vendor.ID......: 2
+#     Vendor.........: Apple
+#     Name...........: Apple M3 Pro
+#     Version........: OpenCL 1.2 
+#     Processor(s)...: 18
+#     Preferred.Thrd.: 32
+#     Clock..........: 1000
+#     Memory.Total...: 27648 MB (limited to 2592 MB allocatable in one block)
+#     Memory.Free....: 13824 MB
+#     Memory.Unified.: 1
+#     Local.Memory...: 32 KB
+#     OpenCL.Version.: OpenCL C 1.2 
+#     Driver.Version.: 1.2 1.0
 
 # 7. Test with a basic benchmark
 hashcat -b -m 0 --force
-# Expected output:
+
+# Expected output (shortened for clarity):
+# 
 # hashcat (v7.0.0-4-g9727714cf) starting in benchmark mode
 # 
 # Benchmarking uses hand-optimized kernel code by default.
@@ -96,10 +146,11 @@ hashcat -b -m 0 --force
 # * Hash-Mode 0 (MD5)
 # -------------------
 # 
-# Speed.#02........:  8795.3 MH/s (6.98ms) @ Accel:544 Loops:1024 Thr:256 Vec:1
+# Speed.#02........:  8820.0 MH/s (6.96ms) @ Accel:544 Loops:1024 Thr:256 Vec:1
 # 
-# Started: Sat Aug  2 13:30:45 2025
-# Stopped: Sat Aug  2 13:30:57 2025
+# Started: Sat Aug  2 20:55:53 2025
+# Stopped: Sat Aug  2 20:56:02 2025
+
 ```
 
 ## 🧪 Project Goals
@@ -108,9 +159,9 @@ hashcat -b -m 0 --force
 - Validate hashcat behavior and compatibility on Apple M3 hardware
 - Support benchmarking both native and bridged modes (e.g., Argon2 mode 70000)
 - Evaluate and log:
-  - Hashcat’s `--identify` feature (planned)
-  - Assimilation Bridge support
-  - Python integration (via benchmarking script)
+  - [`--identify`](https://github.com/hashcat/hashcat/pull/3723) feature
+  - [Assimilation Bridge](https://github.com/hashcat/hashcat/pull/3722) support
+  - [Python integration](https://github.com/hashcat/hashcat/pull/3702)
 - Automate:
   - Selection of algorithms from config
   - Execution of benchmarks using hashcat
@@ -118,18 +169,25 @@ hashcat -b -m 0 --force
 
 ---
 
+## 🔬 Tested Hash Modes
+
+- MD5 (mode 0)
+- SHA1 (mode 100)
+- bcrypt (mode 3200)
+- Argon2 (mode 8000+)
+- WPA2 (mode 22000)
+
+---
+
 ## 📁 Project Structure
 
-
-
 ```
-.
 hashcat-m3-tests/
 ├── benchmark.py              # Main benchmarking script
 ├── plot_results.py           # Script to generate log-scale speed plots
 ├── config/
-│ ├── algorithms.yaml         # User-defined list of hash algorithms to test
-│ └── test_load_config.py     # Config parsing test
+│   ├── algorithms.yaml       # User-defined list of hash algorithms to test
+│   └── test_load_config.py   # Config parsing test
 ├── results.csv               # Collected raw benchmark data
 ├── results.png               # Generated graph based on results
 ├── requirements.txt          # Python dependencies
@@ -146,13 +204,6 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Make sure you have Hashcat 7.0 installed:
-
-```bash
-brew install hashcat
-# or build from source
-```
-
 ## 🚀 Run Benchmarks
 
 ```bash
@@ -165,16 +216,18 @@ python plot_results.py
 
 ## 📊 Outputs
 
-- CSV file with speeds and durations
+- CSV file with speeds and durations:
   ```csv
   name,mode,speed_raw,speed_hps,duration
   MD5,0,8795.3 MH/s (6.98ms) @ Accel,8795300000.0,8.26
   ```
-- PNG chart comparing average performance per hash mode
-
-Example chart:
+- PNG chart comparing average performance per hash mode:
 
 ![Average Cracking Speed](results.png)
+
+This plot shows the average cracking speed (H/s) for each tested algorithm on Apple M3 Pro.
+It is automatically generated based on the benchmark results stored in `results.csv`.
+
 ## 🛡️ Security Reminder
 
 - Use strong, unique passwords
@@ -183,5 +236,10 @@ Example chart:
 
 ---
 
-> Work in progress – contributions and feedback welcome!
-> 
+## 🤝 Contributing
+
+Contributions and feedback are welcome! Feel free to open issues or submit pull requests.
+
+## 📝 License
+
+This project is licensed under the MIT License.
